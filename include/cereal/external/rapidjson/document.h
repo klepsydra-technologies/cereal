@@ -22,6 +22,9 @@
 #include "internal/strfunc.h"
 #include "memorystream.h"
 #include "encodedstream.h"
+#ifdef __freertos__
+#include "freertos_allocator.h"
+#endif
 #include <new>      // placement new
 #include <limits>
 
@@ -2107,7 +2110,11 @@ private:
 };
 
 //! GenericValue with UTF8 encoding
+#ifndef __freertos__
 typedef GenericValue<UTF8<> > Value;
+#else
+typedef GenericValue<UTF8<>, MemoryPoolAllocator<FrtosAllocator>> Value;
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // GenericDocument
@@ -2503,7 +2510,11 @@ private:
 };
 
 //! GenericDocument with UTF8 encoding
+#ifndef __freertos__
 typedef GenericDocument<UTF8<> > Document;
+#else
+typedef GenericDocument<UTF8<>, MemoryPoolAllocator<FrtosAllocator>, FrtosAllocator> Document;
+#endif
 
 //! Helper class for accessing Value of array type.
 /*!
