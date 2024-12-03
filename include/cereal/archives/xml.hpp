@@ -647,7 +647,8 @@ namespace cereal
       {
         try
         {
-          value = std::stold( itsNodes.top().node->value() );
+          auto wstring = std::wstring{reinterpret_cast<wchar_t *>(itsNodes.top().node->value())};
+          value = std::stold(wstring);
         }
         catch( std::out_of_range const & )
         {
